@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.hostname = "01-1-vagrant"
-  config.vm.box = "mrak53/01-1-vagrant-centos8"
+  config.vm.box = "arraktur/01-1-vagrant-centos8"
   config.vm.box_version = "1.0.0"
 
   config.vm.network "forwarded_port", guest: 80, host: 8080
