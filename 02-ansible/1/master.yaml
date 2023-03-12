@@ -1,0 +1,53 @@
+---
+- name: Master provision
+  hosts: master
+
+  tasks:
+    - name: install packages
+      apt:
+        pkg:
+        - apache2
+        - php
+        state: present
+
+    - name: changing permissions for www
+      file:
+        path: /var/www
+        mode: 'o+w'
+
+    - name: create dir php/
+      file:
+        path: /var/www/php
+        state: directory
+
+    - name: changing permissions for php dir
+      file:
+        path: /var/www/php
+        mode: 'o+w'
+    
+    - name: add listen port 81
+      shell: echo 'Listen 81' >> /etc/apache2/ports.conf
+
+    - name: create php site config
+      copy:
+        src: /vagrant/files/001-php-default.conf
+        dest: /etc/apache2/sites-available/001-php-default.conf
+
+    - name: enable php site
+      shell: a2ensite 001-php-default
+
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
+
+    - name: copy index.html
+      copy:
+        src: /vagrant/files/index.html
+        dest: /var/www/html/index.html
+
+    - name: copy index.php
+      copy:
+        src: /vagrant/files/index.php
+        dest: /var/www/php/index.php
+
