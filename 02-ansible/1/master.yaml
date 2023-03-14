@@ -13,20 +13,20 @@
     - name: changing permissions for www
       file:
         path: /var/www
-        mode: 'o+w'
+        mode: '755'
 
     - name: create dir php/
       file:
         path: /var/www/php
         state: directory
+        mode: '755'
 
-    - name: changing permissions for php dir
-      file:
-        path: /var/www/php
-        mode: 'o+w'
-    
     - name: add listen port 81
-      shell: echo 'Listen 81' >> /etc/apache2/ports.conf
+      lineinfile:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen 81'
+        insertafter: '^Listen 80'
+        line: Listen 81
 
     - name: create php site config
       copy:
