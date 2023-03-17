@@ -1,0 +1,48 @@
+---
+- name: Slave1 provision
+  hosts: slave1
+
+  tasks:
+    - name: install packages
+      apt:
+        pkg:
+        - apache2
+        state: present
+    
+    - name: changing permissions for www
+      file:
+        path: /var/www
+        mode: '755'
+
+    - name: copy index.html
+      copy:
+        src: /vagrant/files/index.html
+        dest: /var/www/html/index.html
+
+- name: Slave2 provision
+  hosts: slave2
+  
+  tasks:
+    - name: install packages
+      become: yes
+      apt:
+        pkg:
+        - apache2
+        - php
+        - libapache2-mod-php
+        state: present
+
+    - name: changing permissions for www
+      file:
+        path: /var/www
+        mode: '755'
+
+    - name: remove index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: copy index.php
+      copy:
+        src: /vagrant/files/index.php
+        dest: /var/www/html/index.php

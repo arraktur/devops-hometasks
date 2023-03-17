@@ -1,0 +1,51 @@
+---
+- name: Master provision
+  hosts: master
+
+  tasks:
+    - name: install packages
+      become: yes
+      apt:
+        pkg:
+        - nginx
+        - mc
+        state: present
+
+    - name: add sites in nginx
+      become: yes
+      blockinfile:
+        path: /etc/nginx/sites-available/localhost
+        create: true
+        block: |
+          server {
+              listen 80;
+              listen [::]:80;
+
+              server_name 192.168.210.151;
+
+              location /index.html {
+                  proxy_pass http://192.168.210.152:80;
+              }
+
+              location /index.php {
+                  proxy_pass http://192.168.210.153:80;
+              }
+          }
+    
+    - name: enabled sites
+      become: yes
+      file:
+        src: /etc/nginx/sites-available/localhost
+        dest: /etc/nginx/sites-enabled/localhost
+        state: link
+        owner: root
+        group: root
+        force: yes
+
+    - name: restart nginx
+      become: yes
+      systemd:
+        state: restarted
+        daemon_reload: true
+        name: nginx
+    
