@@ -10,7 +10,6 @@
 
     - name: Install official Puppet repository
       yum:
-        # name: https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
         name: https://yum.puppet.com/puppet-release-el-8.noarch.rpm
         state: present
 
@@ -80,8 +79,6 @@
          - '192.168.210.152 slave1.puppet'
          - '192.168.210.153 slave2.puppet'
 
-        #  - '192.168.210.151 master.puppet'
-
     - name: ADD host puppetserver
       blockinfile: 
         dest: /etc/puppetlabs/puppet/puppet.conf
@@ -116,7 +113,6 @@
       yum:
         pkg: puppet-agent
         state: present
-        # update_cache: true
 
     - name: Add master.puppet to /etc/hosts
       lineinfile: 
@@ -144,12 +140,6 @@
           [agent]
           server = master.puppet
           runinterval = 1m 
-
-    # - name: Add certname in puppet.conf
-    #   lineinfile:
-    #     path: /etc/puppetlabs/puppet/puppet.conf
-    #     line: "certname = {{ inventory_hostname }}"
-    #     create: yes 
 
     - name: Enable puppet
       service:
