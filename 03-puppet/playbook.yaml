@@ -60,29 +60,11 @@
               remote: 'https://github.com/arraktur/Puppet-demo.git'
               basedir: '/etc/puppetlabs/code/environments'
 
-    # - name: Cron [every 5 min] ["*/5 * * * * r10k deploy environment -p"]
-    #   cron:
-    #     name: "Run r10k"
-    #     minute: "*/5"
-    #     job: "/opt/puppetlabs/puppet/bin/r10k deploy environment -p"
-
     - name: Change memory use
       replace:
         path: /etc/sysconfig/puppetserver
         regexp: 'JAVA_ARGS="-Xms2g -Xmx2g'
         replace: 'JAVA_ARGS="-Xms256m -Xmx256m'
-      # notify: restart puppet server
-
-    # - name: Memory use
-      # lineinfile:
-      #   path: /etc/sysconfig/puppetserver
-      #   regexp: '-Xms2'
-      #   insertafter: '^JAVA_ARGS="'
-      #   line: JAVA_ARGS="-Xms256m -Xmx256m -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger"
-      # replace:
-      #   path: /etc/sysconfig/puppetserver
-      #   regexp: "-Xm(s|x)2g"
-      #   replace: '-Xm\g<1>512m'
       # notify: restart puppet server
 
     - name: Creating a file autosign.conf
@@ -121,12 +103,6 @@
     - name: Deploy r10k environment
       shell: /opt/puppetlabs/puppet/bin/r10k deploy environment -p
 
-  # handlers:
-  #   - name: restart puppet server
-  #     service:
-  #       name: puppetserver
-  #       state: restarted
-
 #Slave VM
 
 - name: Slave Puppet
@@ -141,7 +117,7 @@
       yum:
         pkg: puppet-agent
         state: present
-        update_cache: true
+        # update_cache: true
 
     - name: Add master.puppet to /etc/hosts
       lineinfile: 
@@ -181,10 +157,3 @@
         name: puppet
         state: started
         enabled: true
-
-  # handlers:
-  #   - name: restart puppet
-  #     become: true
-  #     service:
-  #       name: puppet
-  #       state: restarted
