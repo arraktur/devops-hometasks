@@ -1,0 +1,20 @@
+[master]
+192.168.210.150
+
+[jenkins.vm]
+192.168.210.151
+
+[nexus.vm]
+192.168.210.152
+
+[staging.vm]
+192.168.210.153
+
+[production.vm]
+192.168.210.154
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=vagrant
+ansible_password=vagrant
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
