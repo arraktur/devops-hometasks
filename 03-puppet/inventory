@@ -1,11 +1,9 @@
 master.puppet ansible_host=127.0.0.1 ansible_connection=local
 
-slave1.puppet ansible_host=192.168.210.152
+slave1.puppet ansible_host=192.168.210.152 ansible_ssh_private_key_file=/home/vagrant/.ssh/private_key_slave1
 
-slave2.puppet ansible_host=192.168.210.153
+slave2.puppet ansible_host=192.168.210.153 ansible_ssh_private_key_file=/home/vagrant/.ssh/private_key_slave2
 
 [all:vars]
 ansible_connection=ssh
-ansible_user=vagrant
-ansible_password=vagrant
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'

@@ -1,8 +1,11 @@
 ---
-- name: All Servers config (repo + firewall)
-  hosts: all
+# Master VM
+
+- name: Master Puppet Server
+  hosts: master.puppet
   become: true
   tasks:
+
     - name: GPG key add
       rpm_key:
         key: https://yum.puppet.com/RPM-GPG-KEY-puppet-20250406
@@ -13,19 +16,6 @@
         name: https://yum.puppet.com/puppet-release-el-8.noarch.rpm
         state: present
 
-    - name: Stop and disable firewalld
-      service:
-        name: firewalld
-        state: stopped
-        enabled: False
-
-# Master VM
-
-- name: Master Puppet Server
-  hosts: master.puppet
-  become: true
-  tasks:
-
     - name: Install packages
       yum:
         pkg:
@@ -34,14 +24,12 @@
         - mc
         state: present
 
-    - name: Add path to .bashrc
-      lineinfile:
-        path: /root/.bashrc
-        line: 'export PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH"'
-        state: present
-    
     - name: install r10k    
-      command: /opt/puppetlabs/puppet/bin/gem install r10k
+      gem:
+        executable: /opt/puppetlabs/puppet/bin/gem
+        name: r10k
+        user_install: false
+        state: present
 
     - name: Create dir for r10k config
       file:
@@ -62,8 +50,8 @@
     - name: Change memory use
       replace:
         path: /etc/sysconfig/puppetserver
-        regexp: 'JAVA_ARGS="-Xms2g -Xmx2g'
-        replace: 'JAVA_ARGS="-Xms256m -Xmx256m'
+        regexp: '-Xm(s|x)2g'
+        replace: '-Xm\g<1>256m'
 
     - name: Creating a file autosign.conf
       copy:
@@ -80,15 +68,17 @@
          - '192.168.210.153 slave2.puppet'
 
     - name: ADD host puppetserver
-      blockinfile: 
-        dest: /etc/puppetlabs/puppet/puppet.conf
+      ini_file: 
+        path: /etc/puppetlabs/puppet/puppet.conf
         owner: root
         group: root
         mode: '0644'
-        block: |
-          [agent]
-          server = master.puppet
-          autosign = true 
+        section: agent
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+      with_items:
+      - { option: "server", value: "master.puppet" }
+      - { option: "autosign", value: "true" }
 
     - name: Start puppetserver daemon
       service:
@@ -109,6 +99,16 @@
   
   tasks:
 
+    - name: GPG key add
+      rpm_key:
+        key: https://yum.puppet.com/RPM-GPG-KEY-puppet-20250406
+        state: present
+
+    - name: Install official Puppet repository
+      yum:
+        name: https://yum.puppet.com/puppet-release-el-8.noarch.rpm
+        state: present
+
     - name: Install puppet agent
       yum:
         pkg: puppet-agent
@@ -119,27 +119,23 @@
         path: /etc/hosts
         line: '192.168.210.151 master.puppet'
 
-    - name: Enable password authentification
-      replace:
-        path: /etc/ssh/sshd_config
-        regexp: '^PasswordAuthentication no$'
-        replace: 'PasswordAuthentication yes'
-
     - name: Restart sshd
       service:
         name: sshd
         state: restarted    
 
     - name: Agent settings
-      blockinfile: 
-        dest: /etc/puppetlabs/puppet/puppet.conf
+      ini_file: 
+        path: /etc/puppetlabs/puppet/puppet.conf
         owner: root
         group: root
         mode: '0644'
-        block: |
-          [agent]
-          server = master.puppet
-          runinterval = 1m 
+        section: agent
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+      with_items:
+      - { option: "server", value: "master.puppet" }
+      - { option: "runinterval", value: "1m" }
 
     - name: Enable puppet
       service:
