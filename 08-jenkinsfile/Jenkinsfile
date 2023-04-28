@@ -26,7 +26,6 @@ pipeline {
         stage('Pre-build tests') {
             steps {
                 sh '''
-                    cd /var/lib/jenkins/workspace/${JOB_NAME}
                     make lint
                     make test
                 '''
@@ -40,7 +39,7 @@ pipeline {
                     GOOS=linux GOARCH=amd64 go build -o ./artifacts/word-cloud-generator -v 
 
                     md5sum artifacts/word-cloud-generator
-                    gzip artifacts/word-cloud-generator
+                    gzip -f artifacts/word-cloud-generator
                     ls -l artifacts/
                 '''
             }
@@ -73,9 +72,9 @@ pipeline {
                     steps{
                         withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
                             sh '''
-                            sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${STG_IP} -o StrictHostKeyChecking=no "sudo systemctl stop wordcloud"
-                            sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${STG_IP} "curl -X GET http://${NEXUS_IP}:8081/repository/${NEXUS_REPO}/${BRANCH}/word-cloud-generator/1.${BUILD_NUMBER}/word-cloud-generator-1.${BUILD_NUMBER}.gz --user ${NEXUS_USER}:${NEXUS_PASSWORD} -o /opt/wordcloud/word-cloud-generator.gz"
-                            sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${STG_IP} "gunzip -f /opt/wordcloud/word-cloud-generator.gz;chmod +x /opt/wordcloud/word-cloud-generator;sudo systemctl start wordcloud"
+                            sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${STG_IP} -o StrictHostKeyChecking=no "sudo systemctl stop wordcloud"
+                            sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${STG_IP} "curl -X GET http://${NEXUS_IP}:8081/repository/${NEXUS_REPO}/${BRANCH}/word-cloud-generator/1.${BUILD_NUMBER}/word-cloud-generator-1.${BUILD_NUMBER}.gz --user ${NEXUS_USER}:${NEXUS_PASSWORD} -o /opt/wordcloud/word-cloud-generator.gz"
+                            sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${STG_IP} "gunzip -f /opt/wordcloud/word-cloud-generator.gz;chmod +x /opt/wordcloud/word-cloud-generator;sudo systemctl start wordcloud"
                             '''
                         }
                     }
@@ -119,9 +118,9 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'nexus-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
                     sh '''
-                    sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${PROD_IP} -o StrictHostKeyChecking=no "sudo systemctl stop wordcloud"
-                    sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${PROD_IP} "curl -X GET http://${NEXUS_IP}:8081/repository/${NEXUS_REPO}/${BRANCH}/word-cloud-generator/1.${BUILD_NUMBER}/word-cloud-generator-1.${BUILD_NUMBER}.gz --user ${NEXUS_USER}:${NEXUS_PASSWORD} -o /opt/wordcloud/word-cloud-generator.gz"
-                    sshpass -p ${SSH_CREDS_PSW} ssh ${SSH_CREDS_PSW}@${PROD_IP} "gunzip -f /opt/wordcloud/word-cloud-generator.gz;chmod +x /opt/wordcloud/word-cloud-generator;sudo systemctl start wordcloud"
+                    sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${PROD_IP} -o StrictHostKeyChecking=no "sudo systemctl stop wordcloud"
+                    sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${PROD_IP} "curl -X GET http://${NEXUS_IP}:8081/repository/${NEXUS_REPO}/${BRANCH}/word-cloud-generator/1.${BUILD_NUMBER}/word-cloud-generator-1.${BUILD_NUMBER}.gz --user ${NEXUS_USER}:${NEXUS_PASSWORD} -o /opt/wordcloud/word-cloud-generator.gz"
+                    sshpass -p ${SSH_CREDS_USR} ssh ${SSH_CREDS_PSW}@${PROD_IP} "gunzip -f /opt/wordcloud/word-cloud-generator.gz;chmod +x /opt/wordcloud/word-cloud-generator;sudo systemctl start wordcloud"
                     '''
                 }
             }
