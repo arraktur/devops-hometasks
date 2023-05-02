@@ -1,0 +1,5 @@
+- name: --= Jenkins =--
+  hosts: localhost
+  # become: true
+  roles:
+  - jenkins

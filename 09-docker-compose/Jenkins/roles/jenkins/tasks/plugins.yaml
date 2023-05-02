@@ -1,0 +1,41 @@
+- name: Install plugins for jenkins
+  jenkins_plugin:
+    name: "{{ item }}"
+    url_username: admin
+    url_password: admin
+    url: http://localhost:8080
+    with_dependencies: yes
+  loop:
+    - git
+    - locale
+    - github
+    - github-branch-source
+    - golang
+    - credentials
+    - workflow-step-api
+    - job-dsl
+    - workflow-api
+    - workflow-cps
+    - workflow-aggregator
+    - workflow-durable-task-step
+    # - antisamy-markup-formatter
+    - nexus-artifact-uploader
+    - timestamper
+    - pipeline
+    - pipeline-stage-view
+    - pipeline-github-lib
+    - pipeline-build-step
+    - pipeline-utility-steps
+    - pipeline-stage-step
+    - workflow-basic-steps
+    - build-pipeline-plugin
+    - ssh
+    - ssh-credentials
+    - ssh-build-agents
+    - ssh-steps
+    - docker-workflow
+    - docker-plugin
+  register: plugin_result
+  until: plugin_result is success
+  retries: 5
+  delay: 5
