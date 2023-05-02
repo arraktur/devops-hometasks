@@ -98,5 +98,4 @@
       changed_when: false
       check_mode: false
       
-    #Install plugins
     - include_tasks: plugins.yaml
