@@ -8,7 +8,7 @@
   # #   become: true
     
   #   tasks:
-    - name: Install packeges all other
+    - name: Install packages all other
       apt:
         # pkg:
         name:
@@ -54,6 +54,7 @@
       with_items:
         - /var/lib/jenkins/users/admin_11540685520045940567
         - /var/lib/jenkins/jobs/gopipeline
+        - /var/lib/jenkins/jobs/gobuild
 
     - name: Copy config files
       copy:
@@ -65,12 +66,17 @@
       with_items:
         - { src: "/ansible/playbooks/roles/jenkins/files/users/users.xml", dst: "/var/lib/jenkins/users/" }
         - { src: "/ansible/playbooks/roles/jenkins/files/users/admin_11540685520045940567/config.xml", dst: "/var/lib/jenkins/users/admin_11540685520045940567/" }
-        # - { src: "/ansible/playbooks/roles/jenkins/files/config.xml", dst: "/var/lib/jenkins/" }
         - { src: "/ansible/playbooks/roles/jenkins/files/locale.xml", dst: "/var/lib/jenkins/" }
-        - { src: "/ansible/playbooks/roles/jenkins/files/credentials.xml", dst: "/var/lib/jenkins/" }
+        # - { src: "/ansible/playbooks/roles/jenkins/files/credentials.xml", dst: "/var/lib/jenkins/" }
         - { src: "/ansible/playbooks/roles/jenkins/files/org.jenkinsci.plugins.golang.GolangBuildWrapper.xml", dst: "/var/lib/jenkins/" }
         - { src: "/ansible/playbooks/roles/jenkins/files/org.jvnet.hudson.plugins.SSHBuildWrapper.xml", dst: "/var/lib/jenkins/" }
         - { src: "/ansible/playbooks/roles/jenkins/files/jobs/gopipeline/config.xml", dst: "/var/lib/jenkins/jobs/gopipeline/" }
+        - { src: "/ansible/playbooks/roles/jenkins/files/jobs/gobuild/config.xml", dst: "/var/lib/jenkins/jobs/gobuild/" }
+
+    - name: Copy credentials .xml file
+      ansible.builtin.unarchive:
+        src: /ansible/playbooks/roles/jenkins/files/users/credentials.tar.gz
+        dest: /var/lib/jenkins/
 
     - name: Disable start wizard
       lineinfile:
