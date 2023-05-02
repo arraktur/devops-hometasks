@@ -1,16 +1,5 @@
----
-  # # - name: Install Jenkins
-  # #   vars:
-  # #     jenkins_user: admin
-  # #     jenkins_passw: admin
-  # #     jenkins_url: http://localhost:8080
-  # #   hosts: localhost
-  # #   become: true
-    
-  #   tasks:
     - name: Install packages all other
       apt:
-        # pkg:
         name:
         - daemon
         - git
