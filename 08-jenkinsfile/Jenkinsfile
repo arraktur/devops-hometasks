@@ -13,9 +13,9 @@ pipeline {
         BRANCH='pipeline'
     }
 
-//     options {
-//         timestamps()
-//     }
+    options {
+        timestamps()
+    }
     
     stages {
         stage('Get source code') {
