@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wcg-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wcg
+  template:
+    metadata:
+      labels:
+        app: wcg
+    spec:
+      containers:
+        - name: wcg
+          image: ghcr.io/arraktur/wcg:70914d7813a6663a34313df01dc6ff2c0ea3ef4e
+          # image: ghcr.io/arraktur/wcg:latest
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
