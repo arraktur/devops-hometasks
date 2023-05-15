@@ -1,3 +1,6 @@
 .vagrant/
 desktop.ini
 .vscode/
+.terraform/
+**/.terraform/*
+*.hcl
