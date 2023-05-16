@@ -5,3 +5,4 @@ desktop.ini
 **/.terraform/*
 *.hcl
 *.tfstate
+*.tfstate.*
