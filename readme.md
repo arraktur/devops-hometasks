@@ -1,1 +1,17 @@
-Hometasks folder
+# Hometasks folder
+
+- [Hometask 1](01-vagrant/#Hometask-1) (git,vagrnat)
+- [Hometask 2](02-ansible/#Hometask-2) (ansible)
+- [Hometask 3](03-puppet/#Hometask-3) (puppet)
+- [Hometask 4](04-puppet/#Hometask-4) (puppet)
+- [Hometask 5](05-jenkins/#Hometask-5) (jenkins)
+- [Hometask 5.v2](05-jenkins_version2/#Hometask-5.v2) (jenkins)
+- [Hometask 6](05-jekins/#Hometask-6) (nexus)
+- [Hometask 7](07-docker/#Hometask-7) (docker)
+- [Hometask 8](08-jenkisfile/#Hometask-8) (Jenkinsfile)
+- [Hometask 9](09-docker-compose/#Hometask-9) (docker-compose)
+- [Hometask 10](.github/workflows/#Hometask-10) (github-actions)
+- [Hometask 11](11-kubernetes/#Hometask-11) (kubernetes)
+- [Hometask 12](12-helm/#Hometask-12) (helm)
+- [Hometask 13](13-terraform/#Hometask-13) (terraform)
+- [Курсовой проект](100-argocd/#курсовой-проект) (project)
