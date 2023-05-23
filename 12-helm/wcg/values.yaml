@@ -12,8 +12,8 @@ container:
 
 image:
   repository: ghcr.io/arraktur/wcg
-  tag: latest
-  # tag: 7396fe254a069d1862b129a5566245281f7f8448
+  imagePullPolicy: Always
+  tag: ""
 
 ingress:
   host: wcg.local
