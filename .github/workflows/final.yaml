@@ -8,10 +8,11 @@ on:
       - "*"
   workflow_dispatch:
 
-env:
-  OWNER: '${{ github.repository_owner }}' 
+# env:
+#   OWNER: '${{ github.repository_owner }}' 
   
 jobs:
+
 
   bump-version:
     runs-on: ubuntu-20.04
@@ -23,7 +24,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-          WITH_V: false
+          REPO_OWNER: ${{ github.repository_owner }}
       - name: tag
         id: tag
         uses: anothrNick/github-tag-action@master # if we use 1 there is a too-be-fixed bug https://github.com/anothrNick/github-tag-action/actions/runs/3139501775/jobs/5099976842#step:1:35 as alternative we could use v1
@@ -32,6 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs: 
       tag: ${{ steps.tag.outputs.tag }}"
+
 
   docker:
     needs: [bump-version]
@@ -45,14 +47,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}     
-      - name: Set lower case owner name
-        run: |
-          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}       
       - name: Push WCG Docker image
         run: |
-          docker build -t ghcr.io/${{ env.OWNER_LC }}/wcg:${{ github.sha }} -t  ghcr.io/${{ env.OWNER_LC }}/wcg:${{ needs.bump-version.outputs.tag }} -f ./07-docker/Dockerfile.multi .
-          docker push ghcr.io/${OWNER_LC}/wcg:${{ github.sha }}
-          docker push ghcr.io/${OWNER_LC}/wcg:${{ needs.bump-version.outputs.tag }}
+          repository_owner=${{ github.repository_owner }}
+          repository_owner_lowercase=$(echo "$repository_owner" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${repository_owner_lowercase}/wcg:${{ github.sha }} -t  ghcr.io/${repository_owner_lowercase}/wcg:${{ needs.bump-version.outputs.tag }}  -f ./07-docker/Dockerfile.multi .
+          docker push ghcr.io/${repository_owner_lowercase}/wcg:${{ github.sha }} 
+          docker push ghcr.io/${repository_owner_lowercase}/wcg:${{ needs.bump-version.outputs.tag }}
+
 
   chart-testing:
     needs: [bump-version, docker]
@@ -125,9 +127,9 @@ jobs:
 
       - name: Add dependency chart repos
         run: |
-            git config user.name "$GITHUB_ACTOR"
+            git config user.name ${{ github.actor }}
             helm package 12-helm/wcg --app-version ${{ needs.bump-version.outputs.tag }} --version ${{ needs.bump-version.outputs.tag }} -d 100-argoCD/
-            helm repo index --url https://arraktur.github.io/devops-hometasks/ 
+            helm repo index --url https://arraktur.github.io/devops-hometasks/ .
             git add .
             git commit -m "Update app"
             git push origin master 
