@@ -10,8 +10,9 @@ spec:
 
   source:
     repoURL: https://github.com/arraktur/devops-hometasks.git
-    targetRevision: master
-    path: "/"
+    targetRevision: "v.*"
+    path: ""
+    chart: wcg
 
   # Destination cluster and namespace to deploy the application
   destination:
