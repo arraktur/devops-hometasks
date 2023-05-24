@@ -3,10 +3,18 @@ entries:
   wcg:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-05-25T01:35:40.1339833+03:00"
+    created: "2023-05-25T02:25:08.5890193+03:00"
+    digest: 974e951ea00e668733c787b3173ff89fdfcc881e4fcad99fcdd6e0648a5dc239
+    name: wcg
+    urls:
+    - https://arraktur.github.io/devops-hometasks/100-argoCD/wcg-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-05-25T02:25:08.5890193+03:00"
     digest: 23d066f8c67ec5ddbbab0e670c54c3a6bb2d58686837c0e44eb926816651e090
     name: wcg
     urls:
-    - 100-argoCD/wcg-0.1.0.tgz
+    - https://arraktur.github.io/devops-hometasks/100-argoCD/wcg-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-25T01:35:40.1252339+03:00"
+generated: "2023-05-25T02:25:08.5874851+03:00"
