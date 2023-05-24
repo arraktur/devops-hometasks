@@ -3,10 +3,10 @@ entries:
   wcg:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-05-24T01:20:42.124662+03:00"
+    created: "2023-05-25T01:35:40.1339833+03:00"
     digest: 23d066f8c67ec5ddbbab0e670c54c3a6bb2d58686837c0e44eb926816651e090
     name: wcg
     urls:
-    - charts/wcg-0.1.0.tgz
+    - 100-argoCD/wcg-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-24T01:20:42.1241123+03:00"
+generated: "2023-05-25T01:35:40.1252339+03:00"
