@@ -2,7 +2,7 @@ replicas: 1
 
 service:
   port: 8888
-  name: wcg
+  name: wcg-svc
   protocol: TCP
 
 container:
