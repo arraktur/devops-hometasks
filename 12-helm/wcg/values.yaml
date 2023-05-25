@@ -14,7 +14,6 @@ container:
 
 image:
   repository: ghcr.io/arraktur/wcg
-  name: github-pull-secret
   imagePullPolicy: Always
   tag: ""
 
