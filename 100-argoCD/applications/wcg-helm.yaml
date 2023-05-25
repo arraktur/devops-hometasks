@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: wcg
+  name: wcg-final
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -9,14 +9,14 @@ spec:
   project: development
 
   source:
-    repoURL: https://github.com/arraktur/devops-hometasks.git
-    targetRevision: "v.*"
+    repoURL: "https://arraktur.github.io/devops-hometasks/"
+    targetRevision: "*"
     path: ""
     chart: wcg
 
   # Destination cluster and namespace to deploy the application
   destination:
-    server: https://kubernetes.default.svc
+    server: "https://kubernetes.default.svc"
     namespace: wcg
 
   # Sync policy
