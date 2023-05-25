@@ -1,7 +1,7 @@
 FROM golang:1.16 as app
 RUN mkdir /wcg; \
     cd /wcg; \
-    git clone https://github.com/Fenikks/word-cloud-generator.git .; \
+    git clone https://github.com/arraktur/word-cloud-generator.git .; \
     make
 
 FROM alpine:latest
