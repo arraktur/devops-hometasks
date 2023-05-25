@@ -128,6 +128,7 @@ jobs:
       - name: Add dependency chart repos
         run: |
             git config user.name ${{ github.actor }}
+            git config --global user.email "mrak53@mail.ru"
             helm package 12-helm/wcg --app-version ${{ needs.bump-version.outputs.tag }} --version ${{ needs.bump-version.outputs.tag }} -d 100-argoCD/
             helm repo index --url https://arraktur.github.io/devops-hometasks/ .
             git add .
