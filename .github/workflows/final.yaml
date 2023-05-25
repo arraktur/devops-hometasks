@@ -32,7 +32,7 @@ jobs:
           VERBOSE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs: 
-      tag: ${{ steps.tag.outputs.tag }}"
+      tag: ${{ steps.tag.outputs.tag }}
 
 
   docker:
